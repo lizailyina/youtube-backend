@@ -12,7 +12,6 @@ const app = express();
 dotenv.config();
 
 const connect = () => {
-  console.log(process.env.MONGO);
   mongoose.connect(process.env.MONGO)
     .then(() => console.log("DB OK"))
     .catch(err => console.log(err));
