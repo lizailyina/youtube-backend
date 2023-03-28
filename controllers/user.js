@@ -97,3 +97,28 @@ export const dislike = async (req, res, next) => {
   }
 }
 
+export const unlike = async (req, res, next) => {
+  const id = req.user.id;
+  const videoId = req.params.videoId;
+  try {
+    await Video.findByIdAndUpdate(videoId, {
+      $pull: { likes: id }
+    });
+    res.status(200).json("Video has been disliked");
+  } catch (err) {
+    next(err);
+  }
+}
+
+export const undislike = async (req, res, next) => {
+  const id = req.user.id;
+  const videoId = req.params.videoId;
+  try {
+    await Video.findByIdAndUpdate(videoId, {
+      $pull: { dislikes: id }
+    });
+    res.status(200).json("Video has been disliked");
+  } catch (err) {
+    next(err);
+  }
+}

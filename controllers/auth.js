@@ -35,3 +35,24 @@ export const signin = async (req, res, next) => {
     next(err);
   }
 }
+
+export const google = async (req, res, next) => {
+  try {
+    const previous = await User.findOne({ email: req.body.email }).lean();
+    if (!previous) {
+      const user = new User({ ...req.body, fromGoogle: true });
+      const savedUser = await user.save();
+      const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
+      res.cookie("access_token", token, {
+        httpOnly: true
+      }).status(200).json(savedUser);
+    } else {
+      const token = jwt.sign({ id: previous._id }, process.env.JWT);
+      res.cookie("access_token", token, {
+        httpOnly: true
+      }).status(200).json(previous);
+    }
+  } catch (err) {
+    next(err);
+  }
+}
