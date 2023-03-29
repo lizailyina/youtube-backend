@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { createError } from "../error.js";
 
 export const signup = async (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
@@ -18,6 +19,7 @@ export const signup = async (req, res, next) => {
 }
 
 export const signin = async (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     const user = await User.findOne({ name: req.body.name }).lean();
     if (!user) return next(createError(404, "User not found"));
@@ -37,6 +39,7 @@ export const signin = async (req, res, next) => {
 }
 
 export const google = async (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     const previous = await User.findOne({ email: req.body.email }).lean();
     if (!previous) {
