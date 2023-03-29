@@ -23,9 +23,7 @@ app.use(cookieParser());
 app.use(cors({ credentials: true, origin: 'https://youtube-frontend-95qlfj5u9-lizailyina.vercel.app' }));
 
 app.use((req, res, next) => {
-  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.append('Access-Control-Allow-Headers', 'Content-Type');
-  res.append(' Access-Control-Allow-Credentials', 'true');
+  res.set(' Access-Control-Allow-Credentials', 'true');
   next();
 });
 
