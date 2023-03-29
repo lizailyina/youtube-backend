@@ -8,6 +8,7 @@ export const addVideo = async (req, res, next) => {
     const savedVideo = await newVideo.save();
     res.status(200).json(savedVideo);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 }
@@ -67,10 +68,10 @@ export const addView = async (req, res, next) => {
       {
         $inc: { views: 1 }
       });
-    if (!video) return next(createError(404, "Video not found"));
     res.status(200).json("Number of views incremented.");
   } catch (err) {
     next(err);
+    console.log(err);
   }
 }
 
@@ -107,6 +108,16 @@ export const sub = async (req, res, next) => {
   }
 }
 
+export const lib = async (req, res, next) => {
+  try {
+    const list = await Video.find({ userId: req.user.id });
+    console.log(list);
+    res.status(200).json(list);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const getByTags = async (req, res, next) => {
   const tags = req.query.tags.split(',');
   try {
@@ -114,6 +125,18 @@ export const getByTags = async (req, res, next) => {
     res.status(200).json(videos);
   } catch (err) {
     next(err);
+    console.log(err);
+  }
+}
+
+export const getByCategories = async (req, res, next) => {
+  const category = req.query.category;
+  try {
+    const videos = await Video.find({ categories: { $in: category } }).limit(20);
+    res.status(200).json(videos);
+  } catch (err) {
+    next(err);
+    console.log(err);
   }
 }
 
