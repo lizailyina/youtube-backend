@@ -20,7 +20,7 @@ const connect = () => {
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: '*' }));
+app.use(cors({ credentials: true, origin: 'https://youtube-frontend-95qlfj5u9-lizailyina.vercel.app' }));
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
