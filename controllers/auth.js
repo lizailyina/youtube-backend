@@ -29,7 +29,8 @@ export const signin = async (req, res, next) => {
     const { password, ...others } = user;
 
     res.cookie("access_token", token, {
-      httpOnly: true
+      httpOnly: true,
+      domain: '.vercel.app',
     }).status(200).json(others);
   } catch (err) {
     next(err);
@@ -44,12 +45,14 @@ export const google = async (req, res, next) => {
       const savedUser = await user.save();
       const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
       res.cookie("access_token", token, {
-        httpOnly: true
+        httpOnly: true,
+        domain: '.vercel.app',
       }).status(200).json(savedUser);
     } else {
       const token = jwt.sign({ id: previous._id }, process.env.JWT);
       res.cookie("access_token", token, {
-        httpOnly: true
+        httpOnly: true,
+        domain: '.vercel.app',
       }).status(200).json(previous);
     }
   } catch (err) {
