@@ -22,11 +22,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true, origin: 'https://youtube-frontend-95qlfj5u9-lizailyina.vercel.app' }));
 
-app.use((req, res, next) => {
-  res.set(' Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/videos", videoRouter);
