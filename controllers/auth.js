@@ -11,7 +11,13 @@ export const signup = async (req, res, next) => {
     const newUser = new User({ ...req.body, password: hash });
 
     const user = await newUser.save();
-    res.status(200).send(user);
+    const token = jwt.sign({ id: user._id }, process.env.JWT);
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    }).status(200).send(user);
   } catch (err) {
     next(err);
   }
@@ -30,6 +36,8 @@ export const signin = async (req, res, next) => {
 
     res.cookie("access_token", token, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     }).status(200).json(others);
   } catch (err) {
     next(err);
@@ -45,11 +53,15 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
       res.cookie("access_token", token, {
         httpOnly: true,
+        sameSite: "none",
+        secure: true,
       }).status(200).json(savedUser);
     } else {
       const token = jwt.sign({ id: previous._id }, process.env.JWT);
       res.cookie("access_token", token, {
         httpOnly: true,
+        sameSite: "none",
+        secure: true,
       }).status(200).json(previous);
     }
   } catch (err) {
