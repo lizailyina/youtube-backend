@@ -121,7 +121,23 @@ export const lib = async (req, res, next) => {
 export const getByTags = async (req, res, next) => {
   const tags = req.query.tags.split(',');
   try {
-    const videos = await Video.find({ tags: { $in: tags } }).limit(20);
+    let videos = await Video.find({ tags: { $in: tags } }).limit(20);
+    if (videos.length < 7) {
+      const chanelVideos = await Video.find({ userId: req.body.userId });
+      chanelVideos.forEach((obj) => {
+        if (!videos.find((item) => { item.title == obj.title }) && videos.length < 7) {
+          videos = [...videos, obj];
+        }
+      })
+    }
+    if (videos.length < 7) {
+      const randomVideos = await Video.aggregate([{ $sample: { size: 20 } }]);
+      randomVideos.forEach((obj) => {
+        if (!videos.find((item) => { item.title == obj.title }) && videos.length < 7) {
+          videos = [...videos, obj];
+        }
+      })
+    }
     res.status(200).json(videos);
   } catch (err) {
     next(err);
