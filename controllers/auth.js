@@ -13,11 +13,7 @@ export const signup = async (req, res, next) => {
     const user = await newUser.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    }).status(200).send(user);
+    res.status(200).json({ ...user, token });
   } catch (err) {
     next(err);
   }
@@ -34,11 +30,7 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT);
     const { password, ...others } = user;
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    }).status(200).json(others);
+    res.status(200).json({ ...others, token });
   } catch (err) {
     next(err);
   }
@@ -51,18 +43,10 @@ export const google = async (req, res, next) => {
       const user = new User({ ...req.body, fromGoogle: true });
       const savedUser = await user.save();
       const token = jwt.sign({ id: savedUser._id }, process.env.JWT);
-      res.cookie("access_token", token, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-      }).status(200).json(savedUser);
+      res.status(200).json({ ...savedUser, token });
     } else {
       const token = jwt.sign({ id: previous._id }, process.env.JWT);
-      res.cookie("access_token", token, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-      }).status(200).json(previous);
+      res.status(200).json({ ...previous, token });
     }
   } catch (err) {
     next(err);

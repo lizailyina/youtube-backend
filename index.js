@@ -20,13 +20,13 @@ const connect = () => {
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  res.header("Access-Control-Expose-Headers", 'Set-Cookie');
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
-app.use(cors({ credentials: true, origin: 'https://youtube-frontend-95qlfj5u9-lizailyina.vercel.app' }));
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+//   res.header("Access-Control-Expose-Headers", 'Set-Cookie');
+//   res.header("Access-Control-Allow-Credentials", true);
+//   next();
+// });
+app.use(cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
